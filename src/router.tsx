@@ -1,6 +1,7 @@
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import ProjectDetail from "./pages/ProjectDetail";
+import ProjectWorkspace from "./pages/ProjectWorkspace";
 
 export const routers = [
     {
@@ -12,6 +13,11 @@ export const routers = [
       path: "/projects/:projectId",
       name: 'project-detail',
       element: <ProjectDetail />,
+    },
+    {
+      path: "/workspace/:projectId",
+      name: 'project-workspace',
+      element: <ProjectWorkspace />,
     },
     /* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */
     {

@@ -14,7 +14,258 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      agent_submissions: {
+        Row: {
+          challenge_id: string | null
+          code: string
+          config: Json | null
+          created_at: string | null
+          description: string | null
+          id: string
+          is_public: boolean | null
+          likes: number | null
+          project_id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          challenge_id?: string | null
+          code: string
+          config?: Json | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          likes?: number | null
+          project_id: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          challenge_id?: string | null
+          code?: string
+          config?: Json | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          likes?: number | null
+          project_id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      hints_used: {
+        Row: {
+          hint_level: Database["public"]["Enums"]["hint_level"]
+          id: string
+          project_id: string
+          task_id: string
+          timestamp: string | null
+          user_id: string
+        }
+        Insert: {
+          hint_level: Database["public"]["Enums"]["hint_level"]
+          id?: string
+          project_id: string
+          task_id: string
+          timestamp?: string | null
+          user_id: string
+        }
+        Update: {
+          hint_level?: Database["public"]["Enums"]["hint_level"]
+          id?: string
+          project_id?: string
+          task_id?: string
+          timestamp?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      task_completions: {
+        Row: {
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          project_id: string
+          task_id: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          project_id: string
+          task_id: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          project_id?: string
+          task_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      test_results: {
+        Row: {
+          ai_feedback: Json | null
+          created_at: string | null
+          creativity_score: number | null
+          functionality_score: number | null
+          id: string
+          passed: boolean
+          project_id: string
+          quality_score: number | null
+          score: number
+          test_details: Json | null
+          user_id: string
+          version: number
+        }
+        Insert: {
+          ai_feedback?: Json | null
+          created_at?: string | null
+          creativity_score?: number | null
+          functionality_score?: number | null
+          id?: string
+          passed: boolean
+          project_id: string
+          quality_score?: number | null
+          score: number
+          test_details?: Json | null
+          user_id: string
+          version: number
+        }
+        Update: {
+          ai_feedback?: Json | null
+          created_at?: string | null
+          creativity_score?: number | null
+          functionality_score?: number | null
+          id?: string
+          passed?: boolean
+          project_id?: string
+          quality_score?: number | null
+          score?: number
+          test_details?: Json | null
+          user_id?: string
+          version?: number
+        }
+        Relationships: []
+      }
+      user_achievements: {
+        Row: {
+          achievement_id: string
+          created_at: string | null
+          id: string
+          unlocked_at: string | null
+          user_id: string
+        }
+        Insert: {
+          achievement_id: string
+          created_at?: string | null
+          id?: string
+          unlocked_at?: string | null
+          user_id: string
+        }
+        Update: {
+          achievement_id?: string
+          created_at?: string | null
+          id?: string
+          unlocked_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_progress: {
+        Row: {
+          attempts: number | null
+          completed_at: string | null
+          created_at: string | null
+          current_task: string | null
+          id: string
+          project_id: string
+          score: number | null
+          started_at: string | null
+          status: Database["public"]["Enums"]["project_status"] | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          attempts?: number | null
+          completed_at?: string | null
+          created_at?: string | null
+          current_task?: string | null
+          id?: string
+          project_id: string
+          score?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["project_status"] | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          attempts?: number | null
+          completed_at?: string | null
+          created_at?: string | null
+          current_task?: string | null
+          id?: string
+          project_id?: string
+          score?: number | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["project_status"] | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_stats: {
+        Row: {
+          challenges_completed: number | null
+          created_at: string | null
+          last_activity_date: string | null
+          level: number | null
+          projects_completed: number | null
+          streak_days: number | null
+          tasks_completed: number | null
+          total_score_average: number | null
+          updated_at: string | null
+          user_id: string
+          xp: number | null
+        }
+        Insert: {
+          challenges_completed?: number | null
+          created_at?: string | null
+          last_activity_date?: string | null
+          level?: number | null
+          projects_completed?: number | null
+          streak_days?: number | null
+          tasks_completed?: number | null
+          total_score_average?: number | null
+          updated_at?: string | null
+          user_id: string
+          xp?: number | null
+        }
+        Update: {
+          challenges_completed?: number | null
+          created_at?: string | null
+          last_activity_date?: string | null
+          level?: number | null
+          projects_completed?: number | null
+          streak_days?: number | null
+          tasks_completed?: number | null
+          total_score_average?: number | null
+          updated_at?: string | null
+          user_id?: string
+          xp?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +274,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      hint_level: "1" | "2" | "3" | "4" | "5"
+      project_status: "locked" | "available" | "in_progress" | "completed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +402,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      hint_level: ["1", "2", "3", "4", "5"],
+      project_status: ["locked", "available", "in_progress", "completed"],
+    },
   },
 } as const
