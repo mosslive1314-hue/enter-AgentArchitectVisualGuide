@@ -8,12 +8,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { 
   CheckCircle2, Circle, ArrowLeft, ArrowRight, 
-  Lightbulb, PlayCircle, Trophy, Clock, AlertCircle
+  Lightbulb, PlayCircle, Trophy, Clock
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useUserProgress, useUpdateProgress, useCompleteTask } from '@/hooks/useUserProgress';
 import { allProjects } from '@/data/projects';
 import { analytics } from '@/lib/analytics';
+import { TestButton } from '@/components/evaluation/TestButton';
 
 export default function ProjectWorkspace() {
   const { projectId } = useParams();
@@ -205,15 +206,13 @@ export default function ProjectWorkspace() {
                 </Alert>
               )}
               
-              {/* Interactive Area - Placeholder for now */}
+              {/* Interactive Area - Placeholder */}
               <div className="border-2 border-dashed rounded-lg p-8 text-center bg-muted/20 mb-6">
                 <PlayCircle className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <p className="text-muted-foreground mb-4">
-                  这里将是互动工作区
+                <p className="text-sm md:text-base text-muted-foreground mb-4">
+                  完成上面的任务后，点击下方按钮测试你的智能体
                 </p>
-                <p className="text-sm text-muted-foreground">
-                  实际项目中，这里会是代码编辑器、配置面板或其他交互界面
-                </p>
+                <TestButton projectId={projectId || ''} />
               </div>
               
               {/* Action Buttons */}
