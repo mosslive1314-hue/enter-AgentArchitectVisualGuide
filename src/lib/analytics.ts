@@ -35,6 +35,11 @@ export const trackEvent = (
 
 // 项目相关事件
 export const analytics = {
+  // 通用事件追踪（用于自定义事件）
+  trackEvent: (eventName: string, eventParams?: Record<string, unknown>) => {
+    trackEvent(eventName, eventParams);
+  },
+
   // 项目开始
   projectStarted: (projectId: string, projectName: string) => {
     trackEvent('project_started', {
