@@ -81,24 +81,32 @@ async function callCozeBot(botId: string, apiKey: string, message: string): Prom
       })
     });
 
-    if (!response.ok) {
-      throw new Error(`API 调用失败: ${response.status}`);
-    }
-
     const data = await response.json();
     
+    // 检查 Coze API 返回的错误码
+    if (data.code !== 0) {
+      // 处理特定错误
+      if (data.code === 700012006) {
+        throw new Error('❌ Personal Access Token 无效或已过期\n\n请检查：\n1. Token 是否正确复制（不要包含多余空格）\n2. Token 是否已过期\n3. 在 Coze 平台重新生成新的 Token');
+      }
+      throw new Error(`Coze API 错误 (${data.code}): ${data.msg || '未知错误'}`);
+    }
+    
     // 提取 Bot 的回复
-    if (data.code === 0 && data.data?.messages) {
+    if (data.data?.messages) {
       const botMessages = data.data.messages.filter((msg: { role: string }) => msg.role === 'assistant');
       if (botMessages.length > 0) {
-        return botMessages[0].content;
+        return botMessages[0].content || '空回复';
       }
     }
     
-    throw new Error('未能获取 Bot 回复');
+    throw new Error('未能获取 Bot 回复，请检查 Bot ID 是否正确');
   } catch (error) {
     console.error('Coze API 调用失败:', error);
-    throw error;
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error('网络请求失败，请检查网络连接');
   }
 }
 

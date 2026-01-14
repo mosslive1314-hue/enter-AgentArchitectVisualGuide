@@ -82,21 +82,42 @@ export function BotConnectionDialog({ open, onOpenChange, onConnect, isLoading }
               </div>
 
               <div className="rounded-lg bg-muted p-4 space-y-2">
-                <p className="text-sm font-medium">如何获取？</p>
-                <ol className="text-xs text-muted-foreground space-y-1 list-decimal list-inside">
-                  <li>登录 Coze 平台（coze.cn 或 coze.com）</li>
-                  <li>进入你创建的 Bot 详情页</li>
-                  <li>在设置中找到"Bot ID"并复制</li>
-                  <li>前往个人中心 → API Keys 创建 Personal Access Token</li>
-                  <li>将信息粘贴到上方输入框</li>
-                </ol>
+                <p className="text-sm font-medium">📖 如何获取 Bot ID 和 Token？</p>
+                
+                <div className="space-y-2">
+                  <p className="text-xs font-medium text-foreground">1. 获取 Bot ID：</p>
+                  <ol className="text-xs text-muted-foreground space-y-1 list-disc list-inside ml-2">
+                    <li>登录 <a href="https://www.coze.cn" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Coze 平台</a></li>
+                    <li>进入你创建的 Bot 详情页</li>
+                    <li>在设置或信息栏找到"Bot ID"并复制</li>
+                  </ol>
+                </div>
+
+                <div className="space-y-2 mt-3">
+                  <p className="text-xs font-medium text-foreground">2. 创建 Personal Access Token：</p>
+                  <ol className="text-xs text-muted-foreground space-y-1 list-disc list-inside ml-2">
+                    <li>访问 <a href="https://www.coze.cn/open/oauth/pats" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Token 管理页面</a></li>
+                    <li>点击"新增令牌"，输入名称（如：学习平台测试）</li>
+                    <li>设置过期时间（建议选择"永不过期"）</li>
+                    <li>选择你的 Bot 所在的工作空间</li>
+                    <li>权限至少勾选：<span className="font-mono bg-yellow-100 dark:bg-yellow-900 px-1">Bot - Conversation</span></li>
+                    <li>点击"确定"后复制生成的 Token（⚠️ 只显示一次！）</li>
+                  </ol>
+                </div>
+                
+                <div className="mt-3 p-2 bg-yellow-500/10 border border-yellow-500/20 rounded">
+                  <p className="text-xs text-yellow-700 dark:text-yellow-400">
+                    ⚠️ Token 只在创建时显示一次，丢失后需要重新生成
+                  </p>
+                </div>
+
                 <a
-                  href="https://www.coze.cn/docs/developer_guides/create_a_bot"
+                  href="https://www.coze.cn/docs/developer_guides/authentication"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs text-primary hover:underline inline-flex items-center gap-1 mt-2"
                 >
-                  查看详细教程 <ExternalLink className="h-3 w-3" />
+                  查看官方认证文档 <ExternalLink className="h-3 w-3" />
                 </a>
               </div>
             </div>
