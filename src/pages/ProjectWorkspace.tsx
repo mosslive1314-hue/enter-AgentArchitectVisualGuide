@@ -134,7 +134,7 @@ export default function ProjectWorkspace() {
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2 md:gap-4 min-w-0 flex-1">
-              <Link to={`/projects/${projectId}`}>
+              <Link to={`/project/${projectId}`}>
                 <Button variant="ghost" size="sm" className="gap-2 px-2 md:px-3">
                   <ArrowLeft className="h-4 w-4" />
                   <span className="hidden sm:inline">返回</span>

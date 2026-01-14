@@ -92,7 +92,7 @@ export default function Index() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center pt-4 px-4">
-            <Link to="/projects/project-1" onClick={handleStartProject} className="w-full sm:w-auto">
+            <Link to="/project/project-1" onClick={handleStartProject} className="w-full sm:w-auto">
               <Button size="lg" className="gap-2 w-full sm:w-auto">
                 开始第一个项目
                 <ArrowRight className="h-4 w-4" />
@@ -201,7 +201,7 @@ export default function Index() {
           <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto px-4">
             不需要任何前置知识，从零开始。第一个项目只需 45 分钟，你就能拥有自己的智能体作品！
           </p>
-          <Link to="/projects/project-1" onClick={handleStartProject}>
+          <Link to="/project/project-1" onClick={handleStartProject}>
             <Button size="lg" className="gap-2 w-full sm:w-auto">
               开始构建你的第一个智能体
               <ArrowRight className="h-4 w-4" />

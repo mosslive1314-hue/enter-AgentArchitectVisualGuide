@@ -101,7 +101,7 @@ export default function ProjectDetail() {
             </div>
 
             <div className="mt-6 pt-6 border-t">
-              <Link to={`/workspace/${projectId}`} className="block">
+              <Link to={`/project/${projectId}/workspace`} className="block">
                 <Button size="lg" className="w-full gap-2">
                   <Play className="h-4 w-4" />
                   开始项目
