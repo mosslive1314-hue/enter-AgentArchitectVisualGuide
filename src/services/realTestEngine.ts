@@ -73,7 +73,6 @@ async function callCozeBot(botId: string, apiKey: string, message: string): Prom
         bot_id: botId,
         user_id: 'test_user_' + Date.now(),
         stream: false,
-        auto_save_history: false,
         additional_messages: [{
           role: 'user',
           content: message,
@@ -90,10 +89,13 @@ async function callCozeBot(botId: string, apiKey: string, message: string): Prom
       if (data.code === 700012006) {
         throw new Error('❌ Personal Access Token 无效或已过期\n\n请检查：\n1. Token 是否正确复制（不要包含多余空格）\n2. Token 是否已过期\n3. 在 Coze 平台重新生成新的 Token');
       }
-      if (data.code === 5000) {
-        throw new Error(`⚠️ Coze 服务器暂时不可用（错误码 ${data.code}）\n\n可能原因：\n1. Coze 服务器正在维护\n2. API 请求频率过高\n3. Bot 未正确发布\n\n建议：\n• 等待几分钟后重试\n• 检查 Bot 是否已发布并可用\n• 在 Coze 平台测试 Bot 是否正常工作`);
+      if (data.code === 4015) {
+        throw new Error('❌ Bot 未发布到 API 渠道（错误码 4015）\n\n解决方法：\n1. 在 Coze 平台打开你的 Bot\n2. 点击右上角"发布"按钮\n3. 选择"API"渠道（不是"体验版"或"应用商店"）\n4. 填写发布信息并确认发布\n5. 发布成功后重新测试\n\n📖 详细教程：https://www.coze.cn/docs/guides/publish_to_channel');
       }
-      throw new Error(`❌ Coze API 错误 (${data.code}): ${data.msg || '未知错误'}\n\n请联系 Coze 技术支持`);
+      if (data.code === 5000) {
+        throw new Error(`⚠️ Coze 服务器暂时不可用（错误码 ${data.code}）\n\n可能原因：\n1. Coze 服务器正在维护\n2. API 请求频率过高\n3. Bot 配置有问题\n\n建议：\n• 等待几分钟后重试\n• 在 Coze 平台测试 Bot 是否正常工作`);
+      }
+      throw new Error(`❌ Coze API 错误 (${data.code}): ${data.msg || '未知错误'}\n\n如果问题持续，请访问 Coze 官方文档或联系技术支持`);
     }
     
     // 提取 Bot 的回复（v3 API）
@@ -106,7 +108,7 @@ async function callCozeBot(botId: string, apiKey: string, message: string): Prom
       }
     }
     
-    throw new Error('❌ 未能获取 Bot 回复\n\n请检查：\n1. Bot ID 是否正确\n2. Bot 是否已发布\n3. Bot 是否配置了正确的工具和提示词');
+    throw new Error('❌ 未能获取 Bot 回复\n\n请检查：\n1. Bot ID 是否正确\n2. Bot 是否已发布到 API 渠道\n3. Bot 是否配置了正确的工具和提示词');
   } catch (error) {
     console.error('Coze API 调用失败:', error);
     if (error instanceof Error) {
