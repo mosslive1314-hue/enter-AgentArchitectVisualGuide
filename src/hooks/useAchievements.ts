@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 export interface AchievementData {
   id: string;
@@ -53,6 +54,19 @@ export function useUnlockAchievement() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-achievements'] });
+      toast.success('成就已解锁！');
     }
   });
+}
+
+// Combined hook for convenience
+export function useAchievements() {
+  const { data: achievements, isLoading } = useUserAchievements();
+  const unlockMutation = useUnlockAchievement();
+
+  return {
+    achievements: achievements || [],
+    isLoading,
+    unlockAchievement: unlockMutation.mutateAsync
+  };
 }
