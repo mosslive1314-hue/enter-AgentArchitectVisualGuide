@@ -60,10 +60,10 @@ const testCases: TestCase[] = [
   }
 ];
 
-// Coze API 调用
+// Coze API 调用 - 使用 v3 版本（更稳定）
 async function callCozeBot(botId: string, apiKey: string, message: string): Promise<string> {
   try {
-    const response = await fetch('https://api.coze.cn/v1/conversation/create', {
+    const response = await fetch('https://api.coze.cn/v3/chat', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
@@ -71,8 +71,9 @@ async function callCozeBot(botId: string, apiKey: string, message: string): Prom
       },
       body: JSON.stringify({
         bot_id: botId,
-        user_id: 'test_user',
+        user_id: 'test_user_' + Date.now(),
         stream: false,
+        auto_save_history: false,
         additional_messages: [{
           role: 'user',
           content: message,
@@ -89,24 +90,29 @@ async function callCozeBot(botId: string, apiKey: string, message: string): Prom
       if (data.code === 700012006) {
         throw new Error('❌ Personal Access Token 无效或已过期\n\n请检查：\n1. Token 是否正确复制（不要包含多余空格）\n2. Token 是否已过期\n3. 在 Coze 平台重新生成新的 Token');
       }
-      throw new Error(`Coze API 错误 (${data.code}): ${data.msg || '未知错误'}`);
+      if (data.code === 5000) {
+        throw new Error(`⚠️ Coze 服务器暂时不可用（错误码 ${data.code}）\n\n可能原因：\n1. Coze 服务器正在维护\n2. API 请求频率过高\n3. Bot 未正确发布\n\n建议：\n• 等待几分钟后重试\n• 检查 Bot 是否已发布并可用\n• 在 Coze 平台测试 Bot 是否正常工作`);
+      }
+      throw new Error(`❌ Coze API 错误 (${data.code}): ${data.msg || '未知错误'}\n\n请联系 Coze 技术支持`);
     }
     
-    // 提取 Bot 的回复
+    // 提取 Bot 的回复（v3 API）
     if (data.data?.messages) {
-      const botMessages = data.data.messages.filter((msg: { role: string }) => msg.role === 'assistant');
+      const botMessages = data.data.messages.filter((msg: { role: string; type: string }) => 
+        msg.role === 'assistant' && msg.type === 'answer'
+      );
       if (botMessages.length > 0) {
         return botMessages[0].content || '空回复';
       }
     }
     
-    throw new Error('未能获取 Bot 回复，请检查 Bot ID 是否正确');
+    throw new Error('❌ 未能获取 Bot 回复\n\n请检查：\n1. Bot ID 是否正确\n2. Bot 是否已发布\n3. Bot 是否配置了正确的工具和提示词');
   } catch (error) {
     console.error('Coze API 调用失败:', error);
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error('网络请求失败，请检查网络连接');
+    throw new Error('❌ 网络请求失败，请检查网络连接');
   }
 }
 

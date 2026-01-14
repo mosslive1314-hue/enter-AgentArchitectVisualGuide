@@ -89,7 +89,8 @@ export function BotConnectionDialog({ open, onOpenChange, onConnect, isLoading }
                   <ol className="text-xs text-muted-foreground space-y-1 list-disc list-inside ml-2">
                     <li>登录 <a href="https://www.coze.cn" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Coze 平台</a></li>
                     <li>进入你创建的 Bot 详情页</li>
-                    <li>在设置或信息栏找到"Bot ID"并复制</li>
+                    <li>在设置或信息栏找到"Bot ID"并复制（通常是一串数字）</li>
+                    <li>⚠️ 确保你的 Bot 已经<span className="font-semibold text-green-600 dark:text-green-400">发布</span>（未发布的 Bot 无法通过 API 调用）</li>
                   </ol>
                 </div>
 
@@ -105,9 +106,9 @@ export function BotConnectionDialog({ open, onOpenChange, onConnect, isLoading }
                   </ol>
                 </div>
                 
-                <div className="mt-3 p-2 bg-yellow-500/10 border border-yellow-500/20 rounded">
-                  <p className="text-xs text-yellow-700 dark:text-yellow-400">
-                    ⚠️ Token 只在创建时显示一次，丢失后需要重新生成
+                <div className="mt-3 p-2 bg-blue-500/10 border border-blue-500/20 rounded">
+                  <p className="text-xs text-blue-700 dark:text-blue-400 font-medium">
+                    💡 测试前请确认：在 Coze 平台的对话窗口中手动测试你的 Bot 是否能正常查询天气
                   </p>
                 </div>
 
