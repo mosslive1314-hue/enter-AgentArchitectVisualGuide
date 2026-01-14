@@ -12,32 +12,33 @@ export default function ProjectDetail() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4">
+      <div className="border-b bg-card sticky top-0 z-10">
+        <div className="container mx-auto px-4 py-3">
           <Link to="/">
-            <Button variant="ghost" className="gap-2">
+            <Button variant="ghost" size="sm" className="gap-2">
               <ArrowLeft className="h-4 w-4" />
-              返回首页
+              <span className="hidden sm:inline">返回首页</span>
+              <span className="sm:hidden">返回</span>
             </Button>
           </Link>
         </div>
       </div>
 
       {/* Project Content */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6 md:py-8">
         <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <Badge className="mb-4">项目 1</Badge>
-            <h1 className="text-4xl font-bold mb-2">天气助手</h1>
-            <p className="text-lg text-muted-foreground">
+          <div className="mb-6 md:mb-8">
+            <Badge className="mb-3 md:mb-4">项目 1</Badge>
+            <h1 className="text-2xl md:text-4xl font-bold mb-2">天气助手</h1>
+            <p className="text-base md:text-lg text-muted-foreground">
               Hello Agent - 你的第一个智能体
             </p>
           </div>
 
-          <Card className="p-6 mb-8">
-            <h2 className="text-2xl font-semibold mb-4">项目概览</h2>
+          <Card className="p-4 md:p-6 mb-6 md:mb-8">
+            <h2 className="text-xl md:text-2xl font-semibold mb-4">项目概览</h2>
             
-            <div className="grid md:grid-cols-3 gap-6 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-6">
               <div className="flex items-center gap-3">
                 <Clock className="h-5 w-5 text-muted-foreground" />
                 <div>
@@ -110,8 +111,8 @@ export default function ProjectDetail() {
           </Card>
 
           {/* Progress Tracker */}
-          <Card className="p-6">
-            <h2 className="text-2xl font-semibold mb-4">学习进度</h2>
+          <Card className="p-4 md:p-6">
+            <h2 className="text-xl md:text-2xl font-semibold mb-4">学习进度</h2>
             <div className="space-y-4">
               <div>
                 <div className="flex justify-between text-sm mb-2">

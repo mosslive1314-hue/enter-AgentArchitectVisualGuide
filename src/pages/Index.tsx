@@ -64,44 +64,44 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/20">
       {/* Hero Section */}
-      <div className="container mx-auto px-4 pt-20 pb-16">
-        <div className="text-center max-w-4xl mx-auto space-y-6">
-          <Badge variant="outline" className="gap-2">
+      <div className="container mx-auto px-4 pt-12 md:pt-20 pb-12 md:pb-16">
+        <div className="text-center max-w-4xl mx-auto space-y-4 md:space-y-6">
+          <Badge variant="outline" className="gap-2 text-xs md:text-sm">
             <Sparkles className="h-3 w-3" />
             AI 智能体实战训练营
           </Badge>
           
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-primary via-purple-600 to-pink-600 bg-clip-text text-transparent px-4">
             在做中学，用输出倒逼输入
           </h1>
           
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
             通过 8 个实战项目，从零开始系统掌握智能体构建。每个项目都有智能助教、自动评估、AI 点评，让你真正学会而不是"学过"。
           </p>
           
-          <div className="flex gap-4 justify-center pt-4">
-            <Link to="/projects/project-1" onClick={handleStartProject}>
-              <Button size="lg" className="gap-2">
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center pt-4 px-4">
+            <Link to="/projects/project-1" onClick={handleStartProject} className="w-full sm:w-auto">
+              <Button size="lg" className="gap-2 w-full sm:w-auto">
                 开始第一个项目
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline" onClick={handleViewRoadmap}>
+            <Button size="lg" variant="outline" onClick={handleViewRoadmap} className="w-full sm:w-auto">
               查看学习路径
             </Button>
           </div>
           
-          <div className="flex gap-6 justify-center text-sm text-muted-foreground pt-4">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-primary" />
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 justify-center text-xs md:text-sm text-muted-foreground pt-4 px-4">
+            <div className="flex items-center justify-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
               完全免费
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-primary" />
+            <div className="flex items-center justify-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
               平台内完成
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-primary" />
+            <div className="flex items-center justify-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
               即时反馈
             </div>
           </div>
@@ -109,13 +109,13 @@ export default function Index() {
       </div>
 
       {/* Features Grid */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">为什么选择我们？</h2>
-          <p className="text-muted-foreground">不是传统的视频教程，而是真正的实战训练营</p>
+      <div className="container mx-auto px-4 py-12 md:py-16">
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold mb-2 md:mb-4">为什么选择我们？</h2>
+          <p className="text-sm md:text-base text-muted-foreground px-4">不是传统的视频教程，而是真正的实战训练营</p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
@@ -132,13 +132,13 @@ export default function Index() {
       </div>
 
       {/* Projects Preview */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">学习路径</h2>
-          <p className="text-muted-foreground">8 个递进式项目，从简单到复杂</p>
+      <div className="container mx-auto px-4 py-12 md:py-16">
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold mb-2 md:mb-4">学习路径</h2>
+          <p className="text-sm md:text-base text-muted-foreground px-4">8 个递进式项目，从简单到复杂</p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 max-w-6xl mx-auto">
           {projects.map((project) => {
             const Icon = project.icon;
             const isLocked = project.status === 'locked';
@@ -183,14 +183,14 @@ export default function Index() {
       </div>
 
       {/* CTA Section */}
-      <div className="container mx-auto px-4 py-20">
-        <Card className="p-12 text-center bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 border-2">
-          <h2 className="text-3xl font-bold mb-4">准备好开始了吗？</h2>
-          <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
+      <div className="container mx-auto px-4 py-12 md:py-20">
+        <Card className="p-6 md:p-12 text-center bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 border-2">
+          <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4">准备好开始了吗？</h2>
+          <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto px-4">
             不需要任何前置知识，从零开始。第一个项目只需 45 分钟，你就能拥有自己的智能体作品！
           </p>
           <Link to="/projects/project-1" onClick={handleStartProject}>
-            <Button size="lg" className="gap-2">
+            <Button size="lg" className="gap-2 w-full sm:w-auto">
               开始构建你的第一个智能体
               <ArrowRight className="h-4 w-4" />
             </Button>

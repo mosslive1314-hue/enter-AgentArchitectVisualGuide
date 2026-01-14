@@ -131,30 +131,30 @@ export default function ProjectWorkspace() {
       {/* Header */}
       <div className="border-b bg-card sticky top-0 z-10 shadow-sm">
         <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2 md:gap-4 min-w-0 flex-1">
               <Link to={`/projects/${projectId}`}>
-                <Button variant="ghost" size="sm" className="gap-2">
+                <Button variant="ghost" size="sm" className="gap-2 px-2 md:px-3">
                   <ArrowLeft className="h-4 w-4" />
-                  返回
+                  <span className="hidden sm:inline">返回</span>
                 </Button>
               </Link>
-              <div>
-                <h1 className="font-semibold">{project.title}</h1>
-                <p className="text-sm text-muted-foreground">
-                  任务 {currentTaskIndex + 1} / {totalTasks}
+              <div className="min-w-0">
+                <h1 className="font-semibold text-sm md:text-base truncate">{project.title}</h1>
+                <p className="text-xs md:text-sm text-muted-foreground">
+                  任务 {currentTaskIndex + 1}/{totalTasks}
                 </p>
               </div>
             </div>
             
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3 md:gap-6">
+              <div className="hidden sm:flex items-center gap-2">
                 <Clock className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm">{project.estimatedTime}</span>
+                <span className="text-sm whitespace-nowrap">{project.estimatedTime}</span>
               </div>
-              <div className="w-48">
+              <div className="w-24 md:w-48">
                 <div className="flex justify-between text-xs mb-1">
-                  <span className="text-muted-foreground">进度</span>
+                  <span className="text-muted-foreground hidden md:inline">进度</span>
                   <span className="font-medium">{Math.round(progressPercent)}%</span>
                 </div>
                 <Progress value={progressPercent} className="h-2" />
@@ -165,31 +165,31 @@ export default function ProjectWorkspace() {
       </div>
       
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-6">
-        <div className="grid lg:grid-cols-3 gap-6">
+      <div className="container mx-auto px-4 py-4 md:py-6">
+        <div className="grid lg:grid-cols-3 gap-4 md:gap-6">
           {/* Left: Task Card */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 md:space-y-6">
             {/* Current Task */}
-            <Card className="p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <Badge variant="outline" className="mb-2">
+            <Card className="p-4 md:p-6">
+              <div className="flex items-start justify-between mb-4 gap-2">
+                <div className="min-w-0 flex-1">
+                  <Badge variant="outline" className="mb-2 text-xs">
                     任务 {currentTaskIndex + 1}.{currentTaskIndex + 1}
                   </Badge>
-                  <h2 className="text-2xl font-bold">创建智能体</h2>
+                  <h2 className="text-xl md:text-2xl font-bold">创建智能体</h2>
                 </div>
                 <Button 
                   variant="ghost" 
                   size="sm"
                   onClick={handleHintClick}
-                  className="gap-2"
+                  className="gap-2 flex-shrink-0"
                 >
                   <Lightbulb className={`h-4 w-4 ${showHint ? 'text-yellow-500' : ''}`} />
-                  提示
+                  <span className="hidden sm:inline">提示</span>
                 </Button>
               </div>
               
-              <p className="text-muted-foreground mb-6">
+              <p className="text-sm md:text-base text-muted-foreground mb-6">
                 在平台中创建你的第一个智能体，给它起个名字
               </p>
               
@@ -217,24 +217,27 @@ export default function ProjectWorkspace() {
               </div>
               
               {/* Action Buttons */}
-              <div className="flex justify-between">
+              <div className="flex flex-col sm:flex-row justify-between gap-3">
                 <Button 
                   variant="outline"
                   disabled={currentTaskIndex === 0}
                   onClick={() => setCurrentTaskIndex(currentTaskIndex - 1)}
+                  className="w-full sm:w-auto"
                 >
                   上一步
                 </Button>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <Button 
                     variant="outline"
                     onClick={() => setShowHint(true)}
+                    className="w-full sm:w-auto"
                   >
                     需要帮助
                   </Button>
                   <Button 
                     onClick={handleCompleteTask}
                     disabled={completeTask.isPending}
+                    className="w-full sm:w-auto"
                   >
                     完成任务
                     <ArrowRight className="h-4 w-4 ml-2" />
@@ -244,12 +247,12 @@ export default function ProjectWorkspace() {
             </Card>
             
             {/* Learning Resources Tabs */}
-            <Card className="p-6">
+            <Card className="p-4 md:p-6">
               <Tabs defaultValue="guide" onValueChange={handleTabChange}>
-                <TabsList>
-                  <TabsTrigger value="guide">操作指南</TabsTrigger>
-                  <TabsTrigger value="concepts">相关概念</TabsTrigger>
-                  <TabsTrigger value="examples">示例代码</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="guide" className="text-xs md:text-sm">操作指南</TabsTrigger>
+                  <TabsTrigger value="concepts" className="text-xs md:text-sm">相关概念</TabsTrigger>
+                  <TabsTrigger value="examples" className="text-xs md:text-sm">示例代码</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="guide" className="space-y-4 mt-4">
@@ -323,10 +326,10 @@ export default function ProjectWorkspace() {
           </div>
           
           {/* Right: Progress & Tasks */}
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             {/* Quick Stats */}
-            <Card className="p-6">
-              <h3 className="font-semibold mb-4">项目统计</h3>
+            <Card className="p-4 md:p-6">
+              <h3 className="text-sm md:text-base font-semibold mb-4">项目统计</h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">完成任务</span>
@@ -344,8 +347,8 @@ export default function ProjectWorkspace() {
             </Card>
             
             {/* Task List */}
-            <Card className="p-6">
-              <h3 className="font-semibold mb-4">任务列表</h3>
+            <Card className="p-4 md:p-6">
+              <h3 className="text-sm md:text-base font-semibold mb-4">任务列表</h3>
               <div className="space-y-3">
                 {['创建智能体', '添加工具', '编写提示词', '添加错误处理', '测试智能体'].map((task, index) => (
                   <div 
@@ -375,10 +378,10 @@ export default function ProjectWorkspace() {
             </Card>
             
             {/* Achievements Preview */}
-            <Card className="p-6">
+            <Card className="p-4 md:p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Trophy className="h-5 w-5 text-yellow-500" />
-                <h3 className="font-semibold">即将解锁</h3>
+                <h3 className="text-sm md:text-base font-semibold">即将解锁</h3>
               </div>
               <div className="space-y-2">
                 <div className="p-3 rounded-lg bg-muted/50 border border-dashed">
