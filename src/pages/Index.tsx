@@ -3,8 +3,34 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Sparkles, Code, Users, Trophy, Zap, Cloud, BookOpen, Target, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { analytics } from '@/lib/analytics';
 
 export default function Index() {
+  const handleStartProject = () => {
+    analytics.trackEvent('cta_clicked', {
+      cta_location: 'hero',
+      cta_text: '开始第一个项目',
+      event_category: 'Engagement',
+    });
+  };
+
+  const handleViewRoadmap = () => {
+    analytics.trackEvent('cta_clicked', {
+      cta_location: 'hero',
+      cta_text: '查看学习路径',
+      event_category: 'Engagement',
+    });
+  };
+
+  const handleProjectCardClick = (projectId: number, projectName: string, isLocked: boolean) => {
+    if (isLocked) {
+      analytics.trackEvent('locked_project_clicked', {
+        project_id: projectId,
+        project_name: projectName,
+        event_category: 'Engagement',
+      });
+    }
+  };
   const features = [
     {
       icon: Target,
@@ -54,13 +80,13 @@ export default function Index() {
           </p>
           
           <div className="flex gap-4 justify-center pt-4">
-            <Link to="/projects/project-1">
+            <Link to="/projects/project-1" onClick={handleStartProject}>
               <Button size="lg" className="gap-2">
                 开始第一个项目
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline">
+            <Button size="lg" variant="outline" onClick={handleViewRoadmap}>
               查看学习路径
             </Button>
           </div>
@@ -125,6 +151,7 @@ export default function Index() {
                     ? 'opacity-60 cursor-not-allowed' 
                     : 'hover:shadow-lg hover:-translate-y-1 cursor-pointer'
                 }`}
+                onClick={() => handleProjectCardClick(project.id, project.name, isLocked)}
               >
                 <div className="absolute top-2 right-2">
                   <Badge variant={isLocked ? 'secondary' : 'default'}>
@@ -162,7 +189,7 @@ export default function Index() {
           <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
             不需要任何前置知识，从零开始。第一个项目只需 45 分钟，你就能拥有自己的智能体作品！
           </p>
-          <Link to="/projects/project-1">
+          <Link to="/projects/project-1" onClick={handleStartProject}>
             <Button size="lg" className="gap-2">
               开始构建你的第一个智能体
               <ArrowRight className="h-4 w-4" />

@@ -13,6 +13,7 @@ import {
 import { Link } from 'react-router-dom';
 import { useUserProgress, useUpdateProgress, useCompleteTask } from '@/hooks/useUserProgress';
 import { allProjects } from '@/data/projects';
+import { analytics } from '@/lib/analytics';
 
 export default function ProjectWorkspace() {
   const { projectId } = useParams();
@@ -20,11 +21,19 @@ export default function ProjectWorkspace() {
   const [showHint, setShowHint] = useState(false);
   const [hintLevel, setHintLevel] = useState(0);
   const [idleTime, setIdleTime] = useState(0);
+  const [projectStartTime] = useState(Date.now());
   
   const project = allProjects.find(p => p.id === projectId);
   const { data: progress } = useUserProgress(projectId || '');
   const updateProgress = useUpdateProgress();
   const completeTask = useCompleteTask();
+  
+  // Track project started on mount
+  useEffect(() => {
+    if (project) {
+      analytics.projectStarted(project.id, project.title);
+    }
+  }, [project]);
   
   // Idle detection for smart hints
   useEffect(() => {
@@ -48,11 +57,18 @@ export default function ProjectWorkspace() {
     if (idleTime === 30 && hintLevel === 0) {
       setHintLevel(1);
       setShowHint(true);
+      // Track stuck detection
+      if (project) {
+        analytics.stuckDetected(project.id, `task-${currentTaskIndex + 1}`, 'idle_30s');
+      }
     } else if (idleTime === 60 && hintLevel === 1) {
       setHintLevel(2);
       setShowHint(true);
+      if (project) {
+        analytics.stuckDetected(project.id, `task-${currentTaskIndex + 1}`, 'idle_60s');
+      }
     }
-  }, [idleTime, hintLevel]);
+  }, [idleTime, hintLevel, project, currentTaskIndex]);
   
   if (!project) {
     return <div>项目未找到</div>;
@@ -71,8 +87,19 @@ export default function ProjectWorkspace() {
         taskId: `task-${currentTaskIndex + 1}`
       });
       
+      // Track task completion
+      analytics.taskCompleted(
+        projectId,
+        `task-${currentTaskIndex + 1}`,
+        ['创建智能体', '添加工具', '编写提示词', '添加错误处理', '测试智能体'][currentTaskIndex]
+      );
+      
       if (currentTaskIndex < totalTasks - 1) {
         setCurrentTaskIndex(currentTaskIndex + 1);
+      } else {
+        // Project completed
+        const duration = Math.round((Date.now() - projectStartTime) / 60000); // minutes
+        analytics.projectCompleted(projectId, project.title, 0, duration);
       }
       
       setHintLevel(0);
@@ -80,6 +107,22 @@ export default function ProjectWorkspace() {
       setIdleTime(0);
     } catch (error) {
       console.error('Failed to complete task:', error);
+    }
+  };
+  
+  const handleHintClick = () => {
+    setShowHint(!showHint);
+    if (!showHint && project) {
+      // Track help button click
+      analytics.helpClicked(project.id, `task-${currentTaskIndex + 1}`);
+      // Track hint usage
+      analytics.hintUsed(project.id, `task-${currentTaskIndex + 1}`, hintLevel + 1);
+    }
+  };
+  
+  const handleTabChange = (value: string) => {
+    if (project) {
+      analytics.resourceViewed(project.id, value);
     }
   };
   
@@ -138,7 +181,7 @@ export default function ProjectWorkspace() {
                 <Button 
                   variant="ghost" 
                   size="sm"
-                  onClick={() => setShowHint(!showHint)}
+                  onClick={handleHintClick}
                   className="gap-2"
                 >
                   <Lightbulb className={`h-4 w-4 ${showHint ? 'text-yellow-500' : ''}`} />
@@ -202,7 +245,7 @@ export default function ProjectWorkspace() {
             
             {/* Learning Resources Tabs */}
             <Card className="p-6">
-              <Tabs defaultValue="guide">
+              <Tabs defaultValue="guide" onValueChange={handleTabChange}>
                 <TabsList>
                   <TabsTrigger value="guide">操作指南</TabsTrigger>
                   <TabsTrigger value="concepts">相关概念</TabsTrigger>
