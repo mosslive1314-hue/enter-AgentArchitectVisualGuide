@@ -63,7 +63,8 @@ const testCases: TestCase[] = [
 // Coze API 调用 - 使用 v3 版本（更稳定）
 async function callCozeBot(botId: string, apiKey: string, message: string): Promise<string> {
   try {
-    const response = await fetch('https://api.coze.cn/v3/chat', {
+    // 步骤 1: 创建对话
+    const createResponse = await fetch('https://api.coze.cn/v3/chat', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
@@ -81,34 +82,87 @@ async function callCozeBot(botId: string, apiKey: string, message: string): Prom
       })
     });
 
-    const data = await response.json();
+    const createData = await createResponse.json();
     
     // 检查 Coze API 返回的错误码
-    if (data.code !== 0) {
+    if (createData.code !== 0) {
       // 处理特定错误
-      if (data.code === 700012006) {
+      if (createData.code === 700012006) {
         throw new Error('❌ Personal Access Token 无效或已过期\n\n请检查：\n1. Token 是否正确复制（不要包含多余空格）\n2. Token 是否已过期\n3. 在 Coze 平台重新生成新的 Token');
       }
-      if (data.code === 4015) {
+      if (createData.code === 4015) {
         throw new Error('❌ Bot 未发布到 API 渠道（错误码 4015）\n\n解决方法：\n1. 在 Coze 平台打开你的 Bot\n2. 点击右上角"发布"按钮\n3. 选择"API"渠道（不是"体验版"或"应用商店"）\n4. 填写发布信息并确认发布\n5. 发布成功后重新测试\n\n📖 详细教程：https://www.coze.cn/docs/guides/publish_to_channel');
       }
-      if (data.code === 5000) {
-        throw new Error(`⚠️ Coze 服务器暂时不可用（错误码 ${data.code}）\n\n可能原因：\n1. Coze 服务器正在维护\n2. API 请求频率过高\n3. Bot 配置有问题\n\n建议：\n• 等待几分钟后重试\n• 在 Coze 平台测试 Bot 是否正常工作`);
+      if (createData.code === 5000) {
+        throw new Error(`⚠️ Coze 服务器暂时不可用（错误码 ${createData.code}）\n\n可能原因：\n1. Coze 服务器正在维护\n2. API 请求频率过高\n3. Bot 配置有问题\n\n建议：\n• 等待几分钟后重试\n• 在 Coze 平台测试 Bot 是否正常工作`);
       }
-      throw new Error(`❌ Coze API 错误 (${data.code}): ${data.msg || '未知错误'}\n\n如果问题持续，请访问 Coze 官方文档或联系技术支持`);
+      throw new Error(`❌ Coze API 错误 (${createData.code}): ${createData.msg || '未知错误'}\n\n如果问题持续，请访问 Coze 官方文档或联系技术支持`);
     }
+
+    // 获取对话 ID 和 conversation ID
+    const chatId = createData.data?.id;
+    const conversationId = createData.data?.conversation_id;
     
-    // 提取 Bot 的回复（v3 API）
-    if (data.data?.messages) {
-      const botMessages = data.data.messages.filter((msg: { role: string; type: string }) => 
-        msg.role === 'assistant' && msg.type === 'answer'
+    if (!chatId || !conversationId) {
+      throw new Error('❌ 无法获取对话 ID');
+    }
+
+    // 步骤 2: 轮询获取对话结果（最多等待 30 秒）
+    const maxAttempts = 30;
+    let attempts = 0;
+    
+    while (attempts < maxAttempts) {
+      attempts++;
+      
+      // 等待 1 秒后查询
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const retrieveResponse = await fetch(
+        `https://api.coze.cn/v3/chat/retrieve?conversation_id=${conversationId}&chat_id=${chatId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+          }
+        }
       );
-      if (botMessages.length > 0) {
-        return botMessages[0].content || '空回复';
+
+      const retrieveData = await retrieveResponse.json();
+      
+      if (retrieveData.code !== 0) {
+        throw new Error(`获取对话结果失败: ${retrieveData.msg}`);
       }
+
+      const status = retrieveData.data?.status;
+      
+      // 对话完成
+      if (status === 'completed') {
+        // 提取 Bot 的回复
+        if (retrieveData.data?.messages) {
+          const botMessages = retrieveData.data.messages.filter(
+            (msg: { role: string; type: string }) => 
+              msg.role === 'assistant' && msg.type === 'answer'
+          );
+          
+          if (botMessages.length > 0) {
+            return botMessages[0].content || '空回复';
+          }
+        }
+        throw new Error('❌ Bot 没有返回回复');
+      }
+      
+      // 对话失败
+      if (status === 'failed') {
+        const errorMsg = retrieveData.data?.last_error?.msg || '未知错误';
+        throw new Error(`❌ Bot 处理失败: ${errorMsg}`);
+      }
+      
+      // 继续等待（状态为 'in_progress'）
     }
     
-    throw new Error('❌ 未能获取 Bot 回复\n\n请检查：\n1. Bot ID 是否正确\n2. Bot 是否已发布到 API 渠道\n3. Bot 是否配置了正确的工具和提示词');
+    throw new Error('❌ 等待 Bot 回复超时（30秒）\n\n可能原因：\n1. Bot 响应时间过长\n2. Bot 配置的工具调用失败\n3. 网络延迟\n\n建议在 Coze 平台测试 Bot 响应速度');
+    
   } catch (error) {
     console.error('Coze API 调用失败:', error);
     if (error instanceof Error) {
