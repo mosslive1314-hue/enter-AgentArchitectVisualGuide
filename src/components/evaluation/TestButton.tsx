@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { Flask, Loader2 } from 'lucide-react';
+import { FlaskConical, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { runRealTests } from '@/services/realTestEngine';
 import { EvaluationPanel } from './EvaluationPanel';
@@ -142,7 +142,7 @@ export function TestButton({ projectId }: TestButtonProps) {
           </>
         ) : (
           <>
-            <Flask className="h-4 w-4" />
+            <FlaskConical className="h-4 w-4" />
             测试我的智能体
           </>
         )}
