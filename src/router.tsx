@@ -2,6 +2,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import ProjectDetail from "./pages/ProjectDetail";
 import ProjectWorkspace from "./pages/ProjectWorkspace";
+import Auth from "./pages/Auth";
 
 export const routers = [
     {
@@ -10,12 +11,17 @@ export const routers = [
       element: <Index />,
     },
     {
-      path: "/projects/:projectId",
+      path: "/auth",
+      name: 'auth',
+      element: <Auth />,
+    },
+    {
+      path: "/project/:projectId",
       name: 'project-detail',
       element: <ProjectDetail />,
     },
     {
-      path: "/workspace/:projectId",
+      path: "/project/:projectId/workspace",
       name: 'project-workspace',
       element: <ProjectWorkspace />,
     },

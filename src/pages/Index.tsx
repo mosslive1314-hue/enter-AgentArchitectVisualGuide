@@ -1,9 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Sparkles, Code, Users, Trophy, Zap, Cloud, BookOpen, Target, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Sparkles, Code, Users, Trophy, Zap, Cloud, BookOpen, Target, CheckCircle2, Brain } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { analytics } from '@/lib/analytics';
+import { UserMenu } from '@/components/layout/UserMenu';
 
 export default function Index() {
   const handleStartProject = () => {
@@ -63,6 +64,17 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/20">
+      {/* Header with User Menu */}
+      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40">
+        <div className="container flex h-16 items-center justify-between px-4">
+          <div className="flex items-center gap-2">
+            <Brain className="h-6 w-6 text-primary" />
+            <span className="font-bold text-lg md:text-xl">智能体学习平台</span>
+          </div>
+          <UserMenu />
+        </div>
+      </header>
+
       {/* Hero Section */}
       <div className="container mx-auto px-4 pt-12 md:pt-20 pb-12 md:pb-16">
         <div className="text-center max-w-4xl mx-auto space-y-4 md:space-y-6">

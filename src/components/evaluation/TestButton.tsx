@@ -3,9 +3,12 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { PlayCircle, Loader2 } from 'lucide-react';
 import { EvaluationPanel } from './EvaluationPanel';
+import { AchievementUnlock } from '@/components/gamification/AchievementUnlock';
 import { runFullEvaluation, generateAIFeedback, type OverallEvaluation, type AIFeedback } from '@/services/evaluationEngine';
 import { useSubmitTest } from '@/hooks/useTestResults';
+import { useUnlockAchievement } from '@/hooks/useAchievements';
 import { analytics } from '@/lib/analytics';
+import { allProjects } from '@/data/projects';
 
 interface TestButtonProps {
   projectId: string;
@@ -18,8 +21,11 @@ export function TestButton({ projectId, disabled }: TestButtonProps) {
   const [evaluation, setEvaluation] = useState<OverallEvaluation | null>(null);
   const [aiFeedback, setAiFeedback] = useState<AIFeedback | null>(null);
   const [version, setVersion] = useState(1);
+  const [showAchievements, setShowAchievements] = useState(false);
+  const [unlockedAchievements, setUnlockedAchievements] = useState<typeof allProjects[0]['rewards']>([]);
   
   const submitTest = useSubmitTest();
+  const unlockAchievement = useUnlockAchievement();
 
   const handleRunTest = async () => {
     setIsRunning(true);
@@ -51,6 +57,32 @@ export function TestButton({ projectId, disabled }: TestButtonProps) {
       });
       
       analytics.testSubmitted(projectId, version, evalResult.totalScore, evalResult.passed);
+      
+      // 如果通过，解锁成就
+      if (evalResult.passed) {
+        const project = allProjects.find(p => p.id === projectId);
+        if (project?.rewards) {
+          setUnlockedAchievements(project.rewards);
+          
+          // 保存成就到数据库
+          for (const reward of project.rewards) {
+            if (reward.type === 'badge') {
+              await unlockAchievement.mutateAsync({
+                achievementId: `${projectId}-${reward.name}`,
+              });
+              
+              analytics.achievementUnlocked(
+                `${projectId}-${reward.name}`,
+                reward.name
+              );
+            }
+          }
+          
+          // 显示成就动画
+          setIsOpen(false);
+          setShowAchievements(true);
+        }
+      }
       
       setVersion(v => v + 1);
     } catch (error) {
@@ -90,6 +122,17 @@ export function TestButton({ projectId, disabled }: TestButtonProps) {
           </>
         )}
       </Button>
+
+      {/* 成就解锁动画 */}
+      {showAchievements && (
+        <AchievementUnlock
+          achievements={unlockedAchievements}
+          onComplete={() => {
+            setShowAchievements(false);
+            setIsOpen(true);
+          }}
+        />
+      )}
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
