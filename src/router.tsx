@@ -3,34 +3,36 @@ import NotFound from "./pages/NotFound";
 import ProjectDetail from "./pages/ProjectDetail";
 import ProjectWorkspace from "./pages/ProjectWorkspace";
 import Auth from "./pages/Auth";
+import { RootLayout } from "./components/layout/RootLayout";
 
 export const routers = [
-    {
-      path: "/",
-      name: 'home',
-      element: <Index />,
-    },
-    {
-      path: "/auth",
-      name: 'auth',
-      element: <Auth />,
-    },
-    {
-      path: "/project/:projectId",
-      name: 'project-detail',
-      element: <ProjectDetail />,
-    },
-    {
-      path: "/project/:projectId/workspace",
-      name: 'project-workspace',
-      element: <ProjectWorkspace />,
-    },
-    /* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */
-    {
-      path: "*",
-      name: '404',
-      element: <NotFound />,
-    },
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      {
+        index: true,
+        element: <Index />,
+      },
+      {
+        path: "auth",
+        element: <Auth />,
+      },
+      {
+        path: "project/:projectId",
+        element: <ProjectDetail />,
+      },
+      {
+        path: "project/:projectId/workspace",
+        element: <ProjectWorkspace />,
+      },
+    ],
+  },
+  /* Catch-all route for 404 */
+  {
+    path: "*",
+    element: <NotFound />,
+  },
 ];
 
 declare global {
