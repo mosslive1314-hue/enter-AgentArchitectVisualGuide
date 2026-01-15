@@ -71,7 +71,15 @@ export default function Index() {
             <Brain className="h-6 w-6 text-primary" />
             <span className="font-bold text-lg md:text-xl">智能体学习平台</span>
           </div>
-          <UserMenu />
+          <div className="flex items-center gap-4">
+            <Link to="/leaderboard">
+              <Button variant="ghost" size="sm" className="hidden md:flex items-center gap-2">
+                <Trophy className="h-4 w-4" />
+                排行榜
+              </Button>
+            </Link>
+            <UserMenu />
+          </div>
         </div>
       </header>
 

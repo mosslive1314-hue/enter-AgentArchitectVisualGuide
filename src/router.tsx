@@ -3,6 +3,8 @@ import NotFound from "./pages/NotFound";
 import ProjectDetail from "./pages/ProjectDetail";
 import ProjectWorkspace from "./pages/ProjectWorkspace";
 import Auth from "./pages/Auth";
+import Profile from "./pages/Profile";
+import Leaderboard from "./pages/Leaderboard";
 import { RootLayout } from "./components/layout/RootLayout";
 
 export const routers = [
@@ -17,6 +19,14 @@ export const routers = [
       {
         path: "auth",
         element: <Auth />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
+      },
+      {
+        path: "leaderboard",
+        element: <Leaderboard />,
       },
       {
         path: "project/:projectId",

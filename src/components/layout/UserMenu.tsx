@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { LogOut, User, Trophy } from 'lucide-react';
+import { LogOut, User, Trophy, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function UserMenu() {
@@ -48,14 +48,18 @@ export function UserMenu() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <User className="mr-2 h-4 w-4" />
-          <span>个人资料</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Trophy className="mr-2 h-4 w-4" />
-          <span>我的成就</span>
-        </DropdownMenuItem>
+        <Link to="/profile">
+          <DropdownMenuItem>
+            <User className="mr-2 h-4 w-4" />
+            <span>个人资料</span>
+          </DropdownMenuItem>
+        </Link>
+        <Link to="/leaderboard">
+          <DropdownMenuItem>
+            <TrendingUp className="mr-2 h-4 w-4" />
+            <span>排行榜</span>
+          </DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>
           <LogOut className="mr-2 h-4 w-4" />
