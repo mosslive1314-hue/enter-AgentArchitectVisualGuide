@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Sparkles, Code, Users, Trophy, Zap, Cloud, BookOpen, Target, CheckCircle2, Brain } from 'lucide-react';
+import { ArrowRight, Sparkles, Code, Users, Trophy, Zap, Cloud, BookOpen, Target, CheckCircle2, Brain, PenTool, BarChart, Bot, Rocket } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { analytics } from '@/lib/analytics';
 import { UserMenu } from '@/components/layout/UserMenu';
@@ -56,10 +56,14 @@ export default function Index() {
   ];
 
   const projects = [
-    { id: 1, name: '天气助手', difficulty: 1, icon: Cloud, status: 'available' },
-    { id: 2, name: '研究助手', difficulty: 2, icon: BookOpen, status: 'locked' },
-    { id: 3, name: '客服机器人', difficulty: 2, icon: Users, status: 'locked' },
-    { id: 4, name: '代码审查', difficulty: 3, icon: Code, status: 'locked' },
+    { id: 1, name: '天气助手', difficulty: 1, subtitle: 'Hello Agent', icon: Cloud, status: 'available', description: '你的第一个智能体' },
+    { id: 2, name: '研究助手', difficulty: 2, subtitle: '知识检索', icon: BookOpen, status: 'locked', description: '搜索和总结信息' },
+    { id: 3, name: '客服机器人', difficulty: 2, subtitle: '对话管理', icon: Users, status: 'locked', description: '多轮交互系统' },
+    { id: 4, name: '代码审查', difficulty: 3, subtitle: 'Code Review', icon: Code, status: 'locked', description: '代码质量分析' },
+    { id: 5, name: '内容创作', difficulty: 3, subtitle: 'AI Writing', icon: PenTool, status: 'locked', description: '智能写作助手' },
+    { id: 6, name: '数据分析师', difficulty: 4, subtitle: 'Data Analysis', icon: BarChart, status: 'locked', description: '数据洞察提取' },
+    { id: 7, name: '个人助理', difficulty: 4, subtitle: 'AI Assistant', icon: Bot, status: 'locked', description: '全能个人助手' },
+    { id: 8, name: '生产部署', difficulty: 5, subtitle: 'Production', icon: Rocket, status: 'locked', description: '上线到生产环境' },
   ];
 
   return (
@@ -158,7 +162,7 @@ export default function Index() {
           <p className="text-sm md:text-base text-muted-foreground px-4">8 个递进式项目，从简单到复杂</p>
         </div>
         
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 max-w-6xl mx-auto">
           {projects.map((project) => {
             const Icon = project.icon;
             const isLocked = project.status === 'locked';
@@ -166,31 +170,39 @@ export default function Index() {
             return (
               <Card 
                 key={project.id}
-                className={`p-6 text-center relative overflow-hidden transition-all ${
+                className={`p-5 md:p-6 text-center relative overflow-hidden transition-all ${
                   isLocked 
                     ? 'opacity-60 cursor-not-allowed' 
-                    : 'hover:shadow-lg hover:-translate-y-1 cursor-pointer'
+                    : 'hover:shadow-lg hover:-translate-y-1 cursor-pointer border-primary/20'
                 }`}
                 onClick={() => handleProjectCardClick(project.id, project.name, isLocked)}
               >
                 <div className="absolute top-2 right-2">
-                  <Badge variant={isLocked ? 'secondary' : 'default'}>
-                    {isLocked ? '🔒 锁定' : '✨ 可用'}
+                  <Badge variant={isLocked ? 'secondary' : 'default'} className="text-xs">
+                    {isLocked ? '🔒' : '✨'}
                   </Badge>
                 </div>
                 
-                <div className="rounded-full w-16 h-16 bg-primary/10 flex items-center justify-center mx-auto mb-4 mt-4">
-                  <Icon className="h-8 w-8 text-primary" />
+                <div className="rounded-full w-14 h-14 md:w-16 md:h-16 bg-primary/10 flex items-center justify-center mx-auto mb-3 mt-2">
+                  <Icon className="h-7 w-7 md:h-8 md:w-8 text-primary" />
                 </div>
                 
-                <h3 className="font-semibold mb-2">项目 {project.id}</h3>
-                <p className="text-sm mb-3">{project.name}</p>
+                <div className="space-y-1 mb-3">
+                  <Badge variant="outline" className="text-[10px] px-2 py-0">
+                    项目 {project.id}
+                  </Badge>
+                  <h3 className="font-semibold text-sm md:text-base">{project.name}</h3>
+                  <p className="text-xs text-muted-foreground">{project.subtitle}</p>
+                  <p className="text-xs text-muted-foreground/80 hidden md:block">
+                    {project.description}
+                  </p>
+                </div>
                 
                 <div className="flex justify-center gap-1">
                   {[...Array(5)].map((_, i) => (
                     <div
                       key={i}
-                      className={`h-1 w-8 rounded-full ${
+                      className={`h-1 w-6 md:w-8 rounded-full ${
                         i < project.difficulty ? 'bg-primary' : 'bg-muted'
                       }`}
                     />
