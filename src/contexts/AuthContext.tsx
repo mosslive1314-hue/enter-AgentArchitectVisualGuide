@@ -40,21 +40,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/`,
-      },
-    });
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/`,
+        },
+      });
 
-    if (error) {
-      toast.error(error.message);
-      return { error };
+      if (error) {
+        console.error('注册错误:', error);
+        toast.error(`注册失败: ${error.message}`);
+        return { error };
+      }
+
+      // 检查用户是否需要验证邮箱
+      if (data.user && !data.session) {
+        toast.info('注册成功！请查收验证邮件');
+        return { error: null };
+      }
+
+      toast.success('注册成功！欢迎加入学习平台！');
+      
+      // 如果有 session，说明自动登录成功，跳转到首页
+      if (data.session) {
+        setTimeout(() => navigate('/'), 100);
+      }
+      
+      return { error: null };
+    } catch (err) {
+      console.error('注册异常:', err);
+      toast.error('注册失败，请重试');
+      return { error: err as AuthError };
     }
-
-    toast.success('注册成功！欢迎加入学习平台！');
-    return { error: null };
   };
 
   const signIn = async (email: string, password: string) => {
